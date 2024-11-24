@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, View} from 'react-native';
+import { Image, StyleSheet, Platform, View, Text} from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -8,12 +8,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList, ScrollView } from 'react-native';
 import ProductCard from '@/components/farmer-home/product-card';
 import { hp, wp } from '@/helpers';
-import { ScreenWrapper } from '@/components';
-import { Tabs } from 'expo-router';
+import { Header, ScreenWrapper } from '@/components';
+import { Tabs, useRouter } from 'expo-router';
 import LogoHeader from '@/components/LogoHeader';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { FAB } from '@rneui/themed';
 import { theme } from '@/constants';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/contexts/AuthContext';
 
 const data = [
   {
@@ -31,31 +34,52 @@ const data = [
 ]
 
 export default function HomeScreen() {
+
+  const router = useRouter();
+  const {user} = useAuth();
+  const [products, setProducts] = useState<Record<any,any>[]>([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase
+      .from('products')
+      .select(`
+        id,
+        crop_id,
+        crop: crops (name),
+        expected_rate,
+        quantity
+      `)
+      .eq('farmer_id', user?.id);
+
+      if(error) {
+        console.log(error)
+        return;
+      }
+      console.log("products >> ",data);
+      setProducts(data);
+    }
+    fetchProducts();
+  }, [])
   return (
 
 
 
     <View
     style={{
-      flex: 1
+      flex: 1,
+      backgroundColor: "white"
     }}
     >
         <ScrollView
       contentContainerStyle={{
         gap: 8,
         paddingVertical: 6,
+        flex: 1,
         paddingHorizontal: wp(5)
       }}
       >
 
-        <ThemedText
-          type='title'
-          style={{
-            fontSize: hp(3.5)
-          }}
-        >
-          Your Produce
-        </ThemedText>
+        <Header showBackButton={false} title='Your Produce'/>
         {/* <FlatList
             data={data}
             renderItem={({item}) => (<ProductCard title={item.title} description={item.description} price={item.price}/>)}
@@ -64,7 +88,35 @@ export default function HomeScreen() {
             }}
             /> */}
         {
-          data.map((item, key) => (<ProductCard key={key} title={item.title} description={item.description} price={item.price} imgSource={item.source} />))
+          products.length > 0 ? products.map((item, key) => (<ProductCard key={key} title={item.crop.name} description={item.description} price={item.expected_rate} imgSource={item.source} />)) : <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          >
+
+<View
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                          alignSelf: "center"
+                        }}
+                    >
+                        <Image source={require('@/assets/images/farmer.png')}
+
+                        />
+                    </View>
+
+            <Text
+            style={{
+              fontSize: hp(2),
+              fontWeight: theme.fonts.semibold,
+              textAlign: 'center',
+              color: theme.colors.textLight
+            }}
+            >You have not uploaded any products so far. Click on the plus icon to add your first product.</Text>
+          </View>
         }
 
   
@@ -77,6 +129,7 @@ export default function HomeScreen() {
       style={{
         backgroundColor: "white"
       }}
+      onPress={() => router.push('/add-produce')}
       buttonStyle={{
         backgroundColor: theme.colors.darkLight
       }}

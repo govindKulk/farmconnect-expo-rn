@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React, { FC } from 'react'
 import { theme } from '@/constants'
 import { hp, wp } from '@/helpers'
@@ -60,7 +60,7 @@ const BidCard: FC<BidCardProps> = ({
                         <Text
                             style={{
                                 fontWeight: theme.fonts.medium,
-
+                                fontSize: hp(2)
                             }}
                         >
                             {bidder.name}
@@ -89,11 +89,12 @@ const BidCard: FC<BidCardProps> = ({
                         flexDirection: 'row',
                         gap: 5,
                         paddingVertical: 5,
-                        justifyContent: 'space-evenly'
+                        justifyContent: 'space-evenly',
+                        alignItems: "center"
                     }}
                 >
 
-                    <View
+                    <TouchableOpacity
                         style={{
                             borderColor: 'green',
                             borderWidth: 1,
@@ -103,8 +104,8 @@ const BidCard: FC<BidCardProps> = ({
                         }}
                     >
                         <Entypo name="check" size={24} color="green" />
-                    </View>
-                    <View
+                    </TouchableOpacity>
+                    <TouchableOpacity
                         style={{
                             borderColor: '#3cb5e0',
                             borderWidth: 1,
@@ -114,8 +115,8 @@ const BidCard: FC<BidCardProps> = ({
                         }}
                     >
                         <Entypo name="chat" size={24} color="#3cb5e0" />
-                    </View>
-                    <View
+                    </TouchableOpacity>
+                    <TouchableOpacity
                         style={{
                             borderColor: 'red',
                             borderWidth: 1,
@@ -125,7 +126,7 @@ const BidCard: FC<BidCardProps> = ({
                         }}
                     >
                         <Entypo name="cross" size={24} color="red" />
-                    </View>
+                    </TouchableOpacity>
                 </View>
 
 

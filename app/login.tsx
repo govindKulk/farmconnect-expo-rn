@@ -8,6 +8,19 @@ import { BackButton, Button, ScreenWrapper, TextField } from '@/components/';
 import { theme } from '@/constants';
 import { hp, wp } from '@/helpers/common';
 import { supabase } from '@/lib/supabase';
+import CustomPicker from '@/components/CustomPicker';
+
+
+const options = [
+    {
+        value: 'farmer',
+        label: 'Farmer'
+    }, 
+    {
+        value: "buyer",
+        label: 'Buyer'
+    }
+]
 
 const Login = () => {
     const router = useRouter();
@@ -17,21 +30,54 @@ const Login = () => {
     const passwordRef = useRef<string>('');
     const [loading, setLoading] = useState<boolean>(false);
 
+    const [selectedUserType, setSelectedUserType] = useState("farmer");
+
     const onSubmit = async () => {
-        if (!emailRef.current && !passwordRef.current) {
+        if (!emailRef.current || !passwordRef.current || !selectedUserType) {
             Alert.alert('Sign In', 'Please fill all the fields!');
             return;
         }
 
         let email = emailRef.current;
         let password = passwordRef.current;
-
+        
         setLoading(true);
 
         const {
-            data: { session },
+            data: { session, user: fetchedUser },
             error,
         } = await supabase.auth.signInWithPassword({ email, password });
+
+        if(fetchedUser){
+            const { data: userInfo, error: fetchError } = await supabase
+            .from('users')
+            .select('user_type')
+            .eq('id', fetchedUser.id)
+            .single();
+
+            if (fetchError) {
+                console.error('Error fetching user type:', fetchError);
+                setLoading(false);
+                Alert.alert('User Type', fetchError.message);
+                return;
+              } else if (userInfo?.user_type !== selectedUserType) {
+                console.error('User type mismatch!');
+                setLoading(false);
+                Alert.alert('User Type', "Select correct user type.");
+                const {error} = await supabase.auth.signOut();
+                if(error){
+                    console.error("User type mismatch", error);
+                }
+                return;
+                // reject login
+
+              } else {
+                console.log('Login successful and user type validated!');
+                // Proceed with login
+            }
+        }
+        
+
         setLoading(false);
         console.log('Session >>:', session);
         console.log('Error >>:', error);
@@ -70,12 +116,27 @@ const Login = () => {
                     />
 
                     {/** Password */}
+
                     <TextField
                         icon={<Icon name={'lock'} size={26} strokeWidth={1.6} />}
                         onChangeText={(value) => (passwordRef.current = value)}
                         placeholder={'Enter your password'}
                         secureTextEntry
                     />
+
+                    {/** User Type */}
+
+                    <View>
+
+                        {/** Forgot password */}
+                        <Text style={{ color: theme.colors.text, fontSize: hp(1.5), marginBottom: hp(1) }}>{'Log in as ? '}</Text>
+                        <CustomPicker
+                            options = {options}
+                            selectedValue={selectedUserType}
+                            setselectedValue={(value) => setSelectedUserType(value)}
+                            icon={<Icon name={'lock'} size={26} strokeWidth={1.6} />}
+                        />
+                    </View>
 
                     {/** Forgot password */}
                     <Text style={styles.forgotPassword}>{'Forgot Password?'}</Text>

@@ -8,6 +8,18 @@ import { BackButton, Button, ScreenWrapper, TextField } from '@/components';
 import { theme } from '@/constants';
 import { hp, wp } from '@/helpers';
 import { supabase } from '@/lib/supabase';
+import CustomPicker from '@/components/CustomPicker';
+
+const options = [
+    {
+        value: 'farmer',
+        label: 'Farmer'
+    }, 
+    {
+        value: "buyer",
+        label: 'Buyer'
+    }
+]
 
 const SignUp: FC = () => {
     const router = useRouter();
@@ -18,8 +30,10 @@ const SignUp: FC = () => {
     const passwordRef = useRef<string>('');
     const [loading, setLoading] = useState<boolean>(false);
 
+    const [selectedUserType, setSelectedUserType] = useState("farmer");
+
     const onSubmit = async () => {
-        if (!emailRef.current && !nameRef.current && !passwordRef.current) {
+        if (!emailRef.current || !nameRef.current || !passwordRef.current || !selectedUserType) {
             Alert.alert('Sign Up', 'Please fill all the fields!');
             return;
         }
@@ -33,7 +47,7 @@ const SignUp: FC = () => {
         const {
             data: { session },
             error,
-        } = await supabase.auth.signUp({ email, options: { data: { name } }, password });
+        } = await supabase.auth.signUp({ email, options: { data: { name, user_type: selectedUserType } }, password });
         setLoading(false);
         console.log('Session >>:', session);
         console.log('Error >>:', error);
@@ -88,6 +102,19 @@ const SignUp: FC = () => {
                         placeholder={'Enter your password'}
                         secureTextEntry
                     />
+
+                    {/** User Type */}
+
+                    <View>
+
+                        <Text style={{ color: theme.colors.text, fontSize: hp(1.5), marginBottom: hp(1) }}>{'Register as ? '}</Text>
+                        <CustomPicker
+                            options={options}
+                            selectedValue={selectedUserType}
+                            setselectedValue={(value) => setSelectedUserType(value)}
+                            icon={<Icon name={'lock'} size={26} strokeWidth={1.6} />}
+                        />
+                    </View>
 
                     {/** Button Submit */}
                     <Button loading={loading} onPress={onSubmit} title={'Sign Up'} />
