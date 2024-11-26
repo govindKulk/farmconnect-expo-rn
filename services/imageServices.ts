@@ -4,11 +4,11 @@ import { decode } from 'base64-arraybuffer';
 import { supabaseUrl } from '@/constants';
 import { supabase } from '@/lib/supabase';
 
-export const getUserImageSrc = (imagePath?: string | null) => {
+export const getUserImageSrc = (imagePath?: string | null, isProduct = false) => {
     if (imagePath) {
         return getSupabaseFileUrl(imagePath);
     } else {
-        return require('@/assets/images/defaultUser.png');
+        return !isProduct ? require('@/assets/images/defaultUser.png') : require('@/assets/images/tomato.jpg');
     }
 };
 

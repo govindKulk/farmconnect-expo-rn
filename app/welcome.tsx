@@ -12,6 +12,9 @@ const Welcome = () => {
 
     const router = useRouter();
     const headingTextColor = useThemeColor({light: theme.colors.textDark, dark: theme.colors.primaryDark}, "text");
+   
+    
+    
     return (
         <ScreenWrapper
         

@@ -15,6 +15,7 @@ const TextField = forwardRef<TextInput, TextFieldProps>(({ containerStyle, icon,
             {icon && icon}
 
             <TextInput
+                
                 placeholderTextColor={theme.colors.textLight}
                 ref={ref}
                 style={{ flex: 1, paddingHorizontal: 0 }}

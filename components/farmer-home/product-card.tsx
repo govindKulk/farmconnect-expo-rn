@@ -2,18 +2,22 @@ import React from 'react'
 import { View } from 'react-native-reanimated/lib/typescript/Animated'
 import { ThemedView } from '../ThemedView'
 import { ThemedText } from '../ThemedText'
-import { Image, Pressable, TouchableOpacity } from 'react-native'
+import { Image, Pressable, TouchableOpacity, TouchableOpacityBase } from 'react-native'
 import { AntDesign, Ionicons } from '@expo/vector-icons'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { hp, wp } from '@/helpers'
 import { theme } from '@/constants'
 import { darkColors } from '@rneui/themed'
+import { useRouter } from 'expo-router'
+import { getUserImageSrc } from '@/services'
 
 interface ProductCardProps {
     title: string
     description: string
     price: string
     imgSource: string | undefined
+    openModal?: () => void
+    product?: any
 }
 
 
@@ -21,13 +25,18 @@ const ProductCard: React.FunctionComponent<ProductCardProps> = ({
     title,
     description,
     price,
-    imgSource = "@/assets/images/tomato.jpg"
+    imgSource = "@/assets/images/tomato.jpg",
+    openModal,
+    product
 }) => {
 
     const color = useThemeColor({
         light: theme.colors.text,
         dark: theme.colors.textDark
     }, "text")
+
+    const router = useRouter();
+
     return (
         <ThemedView
             lightColor='white'
@@ -88,7 +97,7 @@ const ProductCard: React.FunctionComponent<ProductCardProps> = ({
                         lightColor='gray'
                         darkColor='white'
                     >
-                        {description}
+                        {product.description}
                     </ThemedText>
 
 
@@ -106,11 +115,12 @@ const ProductCard: React.FunctionComponent<ProductCardProps> = ({
                     }}
                 >
 
-                    <Image source={require("@/assets/images/tomato.jpg")}
+                    <Image source={getUserImageSrc(product.cover_image, true)}
                         style={{
                             width: "100%",
                             maxHeight: "100%",
-                            borderRadius: 16
+                            borderRadius: 16,
+                            flex: 1
                         }}
                     />
                 </ThemedView>
@@ -128,17 +138,29 @@ const ProductCard: React.FunctionComponent<ProductCardProps> = ({
                 }}
             >
 
-
+                <TouchableOpacity
+                               onPress={() => {
+                                router.push({
+                                    pathname: '/add-produce',
+                                    params: {
+                                        productId: product?.id
+                                    }
+                                })
+                               }}
+                >
                 <ThemedText
                     style={{
                         fontWeight: 700,
                         fontSize: 14,
                         color
                     }}
+     
                 >
                     Edit
                     <AntDesign name="right" size={14} color={color} />
                 </ThemedText>
+                </TouchableOpacity>
+                
 
 
             </ThemedView>

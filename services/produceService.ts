@@ -54,3 +54,50 @@ export const fetchCrops = async () => {
 
     }
 }
+
+
+
+export const fetchAllProducts = async (limit = 10) => {
+    try {
+       
+            const { data, error } = await supabase
+                .from('products')
+                .select(`*, user: users (id, name, image), crop: crops (id, name)`)
+                .order('created_at', { ascending: false })
+                .limit(limit);
+
+            if (error) {
+                console.log('Fetch posts error >>:', error);
+                return { msg: 'Could not fetch the posts', success: false };
+            }
+
+            return { data, success: true };
+        
+    } catch (error) {
+        console.log('Fetch posts error >>:', error);
+        return { msg: 'Could not fetch the posts', success: false };
+    }
+}
+
+export const getSingleProduct = async (productId: string) => {
+    try {
+       
+            const { data, error } = await supabase
+                .from('products')
+                .select(`*, crop: crops (id, name, category: categories (id, name))`)
+                .eq("id", productId)
+                .single()
+
+            if (error) {
+                console.log('Fetch posts error >>:', error);
+                return { msg: 'Could not fetch the posts', success: false };
+            }
+
+            return { data, success: true };
+        
+    } catch (error) {
+        console.log('Fetch posts error >>:', error);
+        return { msg: 'Could not fetch the posts', success: false };
+    }
+}
+

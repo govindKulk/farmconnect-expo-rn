@@ -123,7 +123,7 @@ const SignUp: FC = () => {
                 {/** Footer */}
                 <View style={styles.footer}>
                     <Text style={styles.footerText}>{'Already have an account!'}</Text>
-                    <Pressable onPress={() => router.back()}>
+                    <Pressable onPress={() => router.push('/login')}>
                         <Text
                             style={[
                                 styles.footerText,

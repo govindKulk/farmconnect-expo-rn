@@ -1,3 +1,4 @@
+import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { IUser } from '@/types';
 
@@ -30,3 +31,5 @@ export const updateUser = async (data: any, userId?: string) => {
         return { msg: error.message, success: false };
     }
 };
+
+

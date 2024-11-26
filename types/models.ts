@@ -28,6 +28,7 @@ export interface IUser {
     image: string | null;
     name: string | null;
     phonenumber: string | null;
+    user_type: string;
 }
 
 export interface INotification {

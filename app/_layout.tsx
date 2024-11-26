@@ -55,15 +55,22 @@ const MainLayout: FC = () => {
   };
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.onAuthStateChange(async (_event, session) => {
       console.log('Session User >>:', session?.user);
 
       if (session) {
         /** Set auth */
         /** Move to home screen */
         setAuth?.(session.user as any);
+        const userData = await getUserData(session.user.id);
         updateUserData(session.user, session.user.email);
-        router.replace('/(tabs)');
+
+        if(userData?.data.user_type === "farmer"){
+          router.replace('/(tabs)');
+
+        }else{
+          router.replace('/(buyer)')
+        }
       } else {
         /** Set auth null */
         /** Move to welcome screen */
