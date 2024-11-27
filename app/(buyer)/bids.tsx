@@ -49,7 +49,7 @@ const Bids = () => {
   const { user } = useAuth();
   const getBids = async function () {
     setLoading(true);
-    const { data, error } = await supabase.from('bids').select('*, farmer: users!bids_farmer_id_fkey (id, name, image), product: products (crop : crops(name))').eq("buyer_id", user?.id);
+    const { data, error } = await supabase.from('bids').select('*, farmer: users!bids_farmer_id_fkey (id, name, image), product: products (cover_image, crop : crops(name))').eq("buyer_id", user?.id);
     console.log("data ", data);
     if (error) {
       console.log(error);

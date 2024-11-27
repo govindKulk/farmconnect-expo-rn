@@ -4,7 +4,7 @@ import { BackButton, Button, ScreenWrapper, TextField } from '@/components'
 import Icon from '@/assets/icons'
 import { hp, wp } from '@/helpers'
 import { fetchAllProducts } from '@/services/produceService'
-import { useFocusEffect, useRouter } from 'expo-router'
+import { router, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router'
 import ProductCard from '@/components/farmer-home/product-card'
 import { theme } from '@/constants'
 import BuyerProductCard, { Product } from '@/components/buyer-product-card'
@@ -17,6 +17,7 @@ const BuyerHomeScreen = () => {
 
     const searchRef = useRef<string>();
     const [products, setProducts] = useState<Record<any, any>[]>([]);
+    let [productsCopy, setProductsCopy] = useState<any>([]);
 
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -28,12 +29,14 @@ const BuyerHomeScreen = () => {
     const [message, setMessage] = useState<string>("");
     const [bidType, setBidType] = useState<string>("partial");
 
+    
     const openModal = (product: any) => {
         setSelectedProduct(product);
         setIsModalVisible(true);
     };
 
     const closeModal = () => {
+        router.push({pathname: '/(buyer)/'});
         setIsModalVisible(false);
         setSelectedProduct({});
     };
@@ -66,17 +69,46 @@ const BuyerHomeScreen = () => {
         closeModal();
     };
 
+    const params = useLocalSearchParams();
+
+    useEffect(() => {
+        if(params?.modal == "open" && params?.product){
+           const product = products.find(product => product.id == params.product);
+           if(product){
+            openModal(product);
+           }
+        }
+    }, [params])
+
     useFocusEffect(
 
         useCallback(() => {
             async function fetchProducts() {
                 const products = await fetchAllProducts();
                 setProducts(products.data as any);
+                setProductsCopy(products.data as any);
+               
                 console.log("Products ", products)
             }
             fetchProducts();
         }, [])
     )
+
+    const onTextChange = (value: string) => {
+        searchRef.current = value;
+        if (true){
+            let filteredProducts = productsCopy.filter(p => p.crop.name == value);
+            console.log(productsCopy.length)
+            if(filteredProducts.length > 0){
+
+                setProducts(filteredProducts);
+            }else{
+                setProducts(productsCopy);
+            }
+
+
+        }
+    }
 
 
     return (
@@ -88,7 +120,7 @@ const BuyerHomeScreen = () => {
                 {/* Search Bar */}
                 <TextField
                     icon={<Icon name={'mail'} size={26} strokeWidth={1.6} />}
-                    onChangeText={(value) => (searchRef.current = value)}
+                    onChangeText={onTextChange}
                     placeholder={'Search for yields.. '}
                     
                 />

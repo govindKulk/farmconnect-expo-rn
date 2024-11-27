@@ -11,7 +11,7 @@ import { fetchCategories, fetchCrops, getSingleProduct } from '@/services/produc
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import * as ImagePicker from 'expo-image-picker'
-import { uploadFile } from '@/services'
+import { getUserImageSrc, uploadFile } from '@/services'
 
 
 const cropCategories = ["Cereals",
@@ -59,6 +59,7 @@ const AddProduce = () => {
   // states
   const [selectedCropCategory, setSelectedCropCategory] = useState();
   const [selectedCrop, setSelectedCrop] = useState();
+  const [selectedImage, setSelectedImage] = useState();
   const [selectedProduceCycle, setSelectedProduceCycle] = useState("Kharif");
   const [selectedUnit, setSelectedUnit] = useState("kg");
   const [selectedIsOrganic, setSelectedIsOrganic] = useState(true);
@@ -122,6 +123,7 @@ const AddProduce = () => {
           productQuantity.current = p.quantity;
           productPrice.current = p.price;
           setSelectedCrop(p.crop_id)
+          setSelectedImage(p.cover_image);
         } else {
           console.log("error while fetching single record >> ", res);
         }
@@ -375,7 +377,7 @@ const AddProduce = () => {
               </Pressable>
 
               <Image
-                source={image?.includes('///') ? { uri: image } : require('@/assets/images/tomato.jpg')}
+                source={params.productId ? (image?.includes('///') ? {uri : image} : getUserImageSrc(selectedImage, true)) : (image?.includes('///') ? { uri: image } : require('@/assets/images/tomato.jpg'))}
 
                 style={{
                   flex: 1,

@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React, { FC } from 'react'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native'
+import React, { FC, useState } from 'react'
 import { theme } from '@/constants'
 import { hp, wp } from '@/helpers'
 import { useThemeColor } from '@/hooks/useThemeColor'
@@ -10,6 +10,8 @@ import Icon from '@/assets/icons'
 import Avatar from './Avatar'
 
 import Entypo from '@expo/vector-icons/Entypo';
+import { supabase } from '@/lib/supabase'
+import { getUserImageSrc } from '@/services'
 
 export interface Product {
     title: string;
@@ -18,25 +20,65 @@ export interface Product {
 }
 export type Bidder = Partial<IUser> & { message: string, bid: string };
 interface BidCardProps {
-    product: Product;
-    bidder: Bidder
+    bid: any, 
+    onBidCancel: () => void
 }
 
 
 const BidCard: FC<BidCardProps> = ({
-    product,
-    bidder
+    bid : propBid,
+    onBidCancel
 }) => {
 
     const bgColor = useThemeColor({
         light: "white",
         dark: theme.colors.primaryDark
     }, "background")
+
+    const [bid, setBid] = useState<any>(propBid)
+    const onCancel = async () => {
+        if(bid?.status == "cancelled") return;
+        const {error} = await supabase.from('bids').update({
+            status: "cancelled"
+        }).eq("id", bid.id);
+        if(error){
+            Alert.alert("Error while cancelling bid");
+            return;
+        }
+        Alert.alert("Successfully cancelled bid");
+        onBidCancel();
+    }
+
+    const onAccept = async () => {
+
+        if(bid?.status == "accepted") return;
+        const {error} = await supabase.from('bids').update({
+            status: "accepted"
+        }).eq("id", bid.id);
+        if(error){
+            Alert.alert("Error while acdepting bid");
+            return;
+        }
+
+        setBid((prev: any) => ({
+            ...prev,
+            status: "accepted"
+        }))
+        Alert.alert("Successfully accepted bid");
+
+    }
     return (
-        <View
-            style={[styles.cardContainer, {
+ <View
+ style={{
+    flex: 1
+ }}
+ >
+           <View
+            style= {[styles.cardContainer, {
                 backgroundColor: bgColor,
-                borderRadius: 16
+                borderTopEndRadius: 18,
+                borderBottomEndRadius: (bid?.status == "accepted" ? 0 : 18),
+            
             }]}
         >
             {/* left col */}
@@ -51,7 +93,7 @@ const BidCard: FC<BidCardProps> = ({
                         alignItems: 'center'
                     }}
                 >
-                    <Avatar size={60} />
+                    <Avatar size={60} uri={bid?.buyer?.image} />
                     <View
                         style={{
                             flex: 1
@@ -63,14 +105,14 @@ const BidCard: FC<BidCardProps> = ({
                                 fontSize: hp(2)
                             }}
                         >
-                            {bidder.name}
+                            {bid?.buyer?.name}
                         </Text>
                         <Text
                             style={{
                                 fontSize: hp(1.5),
                             }}
                         >
-                            {bidder.message}
+                            {bid?.message}
                         </Text>
                         <Text
                             style={{
@@ -78,7 +120,7 @@ const BidCard: FC<BidCardProps> = ({
 
                             }}
                         >
-                            Bid Amount: {bidder.bid}RS / KG
+                            Bid Amount: {bid?.bid_price}RS / KG
                         </Text>
                     </View>
                 </View>
@@ -102,6 +144,8 @@ const BidCard: FC<BidCardProps> = ({
                             padding: 2
 
                         }}
+
+                        onPress={onAccept}
                     >
                         <Entypo name="check" size={24} color="green" />
                     </TouchableOpacity>
@@ -124,6 +168,8 @@ const BidCard: FC<BidCardProps> = ({
                             padding: 2
 
                         }}
+
+                        onPress={onCancel}
                     >
                         <Entypo name="cross" size={24} color="red" />
                     </TouchableOpacity>
@@ -144,11 +190,12 @@ const BidCard: FC<BidCardProps> = ({
                 }]}
             >
 
-                <Image source={require('@/assets/images/tomato.jpg')}
+                <Image source={getUserImageSrc(bid.product.cover_image)}
                     style={{
                         width: "100%",
                         maxHeight: "100%",
-                        borderRadius: 16
+                        borderRadius: 16,
+                        flex: 1
                     }}
                 />
 
@@ -158,10 +205,52 @@ const BidCard: FC<BidCardProps> = ({
                     fontSize: hp(1.5)
                 }}
                 >
-                    {product.title}
+                    {bid?.product?.crop?.name}
                 </Text>
             </ThemedView>
+
+            
         </View>
+
+        {bid?.status == "accepted" && <View
+        style={{
+            flex: 1,
+            padding: 5,
+            borderBottomLeftRadius: 18,
+            borderBottomRightRadius: 18,
+            backgroundColor: theme.colors.primary
+        }}
+        >
+            <Text
+            style={{
+                color: "white",
+                textAlign: "center",
+                fontWeight: theme.fonts.bold
+            }}
+            >
+                Accepted
+            </Text>
+        </View>}
+        {bid?.status == "cancelled" && <View
+        style={{
+            flex: 1,
+            padding: 5,
+            borderBottomLeftRadius: 18,
+            borderBottomRightRadius: 18,
+            backgroundColor: theme.colors.rose
+        }}
+        >
+            <Text
+            style={{
+                color: "white",
+                textAlign: "center",
+                fontWeight: theme.fonts.bold
+            }}
+            >
+                Cancelled
+            </Text>
+        </View>}
+ </View>
     )
 }
 

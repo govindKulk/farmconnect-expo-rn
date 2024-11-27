@@ -3,6 +3,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { theme } from "@/constants";
 import { hp, wp } from "@/helpers";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { useRouter } from "expo-router";
 import { Text, View, FlatList, TouchableOpacity } from "react-native";
 
 
@@ -19,7 +20,7 @@ const chatData = [
 ]
 export default function ChatScreen() {
 
-
+    const router = useRouter();
     const textColor  = useThemeColor({light: "black", dark: "white"}, "text");
     return (
 
@@ -36,7 +37,11 @@ export default function ChatScreen() {
                 }}
                 renderItem={({ item }) => (
 
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => {
+                        router.push('./comingsoon')
+                    }}
+                    >
                         <View
                             style={{
                                 gap: 5,

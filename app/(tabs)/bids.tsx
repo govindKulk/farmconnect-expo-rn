@@ -1,8 +1,12 @@
-import { View, Text, FlatList } from 'react-native'
-import React from 'react'
-import { Header, ScreenWrapper } from '@/components'
+import { View, Text, FlatList, Alert, Image } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Header, Loading, ScreenWrapper } from '@/components'
 import BidCard, { Bidder, Product } from '@/components/BidCard'
-import { wp } from '@/helpers'
+import { hp, wp } from '@/helpers'
+import { useAuth } from '@/contexts/AuthContext'
+import { supabase } from '@/lib/supabase'
+import { Link, useFocusEffect } from 'expo-router'
+import { theme } from '@/constants'
 const data : {
   product: Product,
   bidder: Bidder
@@ -37,6 +41,45 @@ const data : {
 ]
 
 const Bids = () => {
+
+  const [bids, setBids] = useState<Record<any, any>[]>([]);
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  const getBids = async function () {
+    setLoading(true);
+    const { data, error } = await supabase.from('bids').select('*, buyer: users!bids_buyer_id_fkey (id, name, image), product: products (cover_image, crop : crops(name))').eq("farmer_id", user?.id);
+    console.log("data ", data);
+    if (error) {
+      console.log(error);
+      setTimeout(() => setLoading(false), 2000)
+      Alert.alert("Error while fetching bids.");
+      return;
+    }
+    setBids(data);
+    setLoading(false);
+
+
+  }
+
+  useFocusEffect(useCallback(() => {getBids()}, []));
+
+  if (loading) {
+    return (
+      <ScreenWrapper>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Loading />
+
+        </View>
+      </ScreenWrapper>
+    )
+  }
+
   return (
 
     <View
@@ -47,14 +90,54 @@ const Bids = () => {
     >
     <Header title="Received Bids" showBackButton={false} />
 
-            <FlatList
-            data={data}
-            renderItem={({item}) => (<BidCard product={item.product} bidder={item.bidder}/>)}
+      { bids.length > 0 ?       <FlatList
+            data={bids}
+            renderItem={({item}) => (<BidCard bid={item} onBidCancel={() => getBids()} />)}
             contentContainerStyle={{
               gap: 8
             }}
 
             />
+            
+            : <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+    
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                alignSelf: "center"
+              }}
+            >
+              <Image source={require('@/assets/images/farmer.png')}
+    
+              />
+            </View>
+    
+            <Text
+              style={{
+                fontSize: hp(2),
+                fontWeight: theme.fonts.semibold,
+                textAlign: 'center',
+                color: theme.colors.textLight
+              }}
+            >You have not received bid on a product so far.
+              <Link href="/(tabs)"
+                style={{
+                  color: theme.colors.primary,
+                  fontWeight: "bold",
+                }}
+              >
+                Add More Products
+              </Link>
+            </Text>
+    
+          </View> }
       </View>
 
 

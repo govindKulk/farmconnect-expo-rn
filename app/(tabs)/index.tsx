@@ -102,6 +102,7 @@ const submitBid = async () => {
         id,
         crop_id,
         description,
+        unit,
         crop: crops (name),
         cover_image,
         expected_rate,

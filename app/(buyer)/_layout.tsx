@@ -80,6 +80,25 @@ export default function TabLayout() {
             href: null
           }}
         />
+
+<Tabs.Screen
+          name="product"
+        
+          options={{
+            headerShown: false,
+            
+            href: null
+          }}
+        />
+<Tabs.Screen
+          name="comingsoon"
+        
+          options={{
+            headerShown: false,
+            
+            href: null
+          }}
+        />
      
         
       </Tabs>
