@@ -11,6 +11,7 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { getUserData } from '@/services';
 import { LogBox } from 'react-native';
+import { ChatProvider } from '@/contexts/ChatContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -35,7 +36,9 @@ const _layout = () => {
   return (
     <AuthProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <MainLayout />
+        <ChatProvider>
+          <MainLayout />
+        </ChatProvider>
       </ThemeProvider>
     </AuthProvider>
   );
@@ -65,10 +68,10 @@ const MainLayout: FC = () => {
         const userData = await getUserData(session.user.id);
         updateUserData(session.user, session.user.email);
 
-        if(userData?.data.user_type === "farmer"){
+        if (userData?.data.user_type === "farmer") {
           router.replace('/(tabs)');
 
-        }else{
+        } else {
           router.replace('/(buyer)')
         }
       } else {

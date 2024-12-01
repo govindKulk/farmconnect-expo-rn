@@ -2,13 +2,16 @@ import { Avatar, Header } from "@/components";
 import { ThemedText } from "@/components/ThemedText";
 import { theme } from "@/constants";
 import { useAuth } from "@/contexts/AuthContext";
+import { useChatContext } from "@/contexts/ChatContext";
 import { hp, wp } from "@/helpers";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { supabase } from "@/lib/supabase";
+import { getUserImageSrc } from "@/services";
 import { subscribeToConversations } from "@/services/messageService";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, View, FlatList, TouchableOpacity, Alert } from "react-native";
+
 
 
 
@@ -30,40 +33,59 @@ export default function ChatScreen() {
     const router = useRouter();
     const {user} = useAuth();
 
-    const [conversations, setConversations] = useState<any>();
-    const getAllConversations = async function () {
-        const {data, error} = await supabase.from('conversations').select('*, buyer: users!conversations_buyer_id_fkey (name)').eq('farmer_id', user?.id);
-        if(error){
-            console.log(error);
-            Alert.alert("Error while loading conversations! Please try again later");
+    // const [conversations, setConversations] = useState<any[]>([]);
+  
+
+    const {getAllConversations, conversations } = useChatContext();
+    useEffect(() => {
+        if (!user?.id) {
+            console.log("User ID not available!");
             return;
         }
-        // console.log(data);
-        setConversations(data);
-    }
-    useEffect(() => {
+    
+        // Fetch initial conversations
+        // const fetchConversations = async () => {
+        //     const { data, error } = await supabase
+        //         .from("conversations")
+        //         .select("*, buyer: users!conversations_buyer_id_fkey (name, image)")
+        //         .eq("farmer_id", user.id); // Fetch conversations where the user is the farmer
+    
+        //     if (error) {
+        //         console.error("Error fetching conversations:", error);
+        //         Alert.alert("Error while loading conversations! Please try again later");
+        //         return;
+        //     }
+    
+        //     console.log("Fetched conversations:", data);
+        //     setConversations(data || []);
+        // };
+
+    
+        // fetchConversations();
+
         getAllConversations();
-        const unsubscribe = subscribeToConversations(user?.id,"farmer",  (conversation) => {
-            console.log("new ", conversation)
-            setConversations((prev: any) => {
-                return [
-                    ...prev,
-                    conversation
-                ]
-            })
-        })
+    
 
+        // Subscribe to new conversations
+        const unsubscribe = subscribeToConversations(user.id, "farmer", (conversation) => {
+            console.log("New conversation received:", conversation);
+    
+            // Update conversations state with the new conversation
+            // setConversations((prev: any) => {
+            //     // Prevent duplicates
+            //     if (prev.some((c: any) => c.id === conversation.id)) return prev;
+            //     return [...prev, conversation];
+            // });
+
+            getAllConversations();
+        });
+    
+        // Cleanup
         return () => {
-            if(unsubscribe){
-                unsubscribe();
-            }
-        }
-    }, [])
-
-    useEffect(() => {
-
-        console.log("conversations state", conversations);
-    }, [conversations])
+            if (unsubscribe) unsubscribe();
+        };
+    }, [user?.id]);
+    
 
     return (
 
@@ -74,14 +96,19 @@ export default function ChatScreen() {
         >
             <Header title="Your Chats" showBackButton={false} />
             <FlatList
-                data={chatData}
+                data={conversations}
                 contentContainerStyle={{
                     gap: 10
                 }}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
 
                     <TouchableOpacity
-                    onPress={() => router.push('/(tabs)/single_chat')}
+                    onPress={() => router.push({
+                        pathname: '/(tabs)/single_chat',
+                        params: {
+                            conversationId: item.id
+                        }
+                    })}
                     >
                         <View
                             style={{
@@ -90,10 +117,13 @@ export default function ChatScreen() {
                                 alignItems: 'center',
                                 justifyContent: "center",
                                 paddingVertical: 5,
-                                paddingHorizontal: 10
+                                paddingHorizontal: 10,
+                                
                             }}
-                            key={item.user}>
-                            <Avatar size={60} rounded={wp(100)} />
+                            key={item.buyer_id}>
+       
+
+                            <Avatar size={60} rounded={wp(100)} uri={item.buyer?.image} />
                             <View
                                 style={{
                                     flex: 1,
@@ -113,17 +143,17 @@ export default function ChatScreen() {
                                             fontWeight: theme.fonts.semibold,
                                             color: textColor
                                         }}
-                                    >{item.user}</Text>
-                                    <Text style={{ fontSize: hp(1.5) }}>{item.lastSeen}</Text>
+                                    >{item?.buyer?.name}</Text>
+                                    <Text style={{ fontSize: hp(1.5) }}>{"2 hours ago"}</Text>
                                 </View>
 
-                                <Text
+                                {/* <Text
                                     style={{
                                         color: theme.colors.textLight
                                     }}
                                 >
                                     Hi, I want to buy your yield.
-                                </Text>
+                                </Text> */}
                             </View>
 
                         </View>

@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase"
 
-export const sendMessage = async (conversationId: number, senderId: string, message: string) => {
+export const sendMessage = async (conversationId: string, senderId: string, message: string) => {
   const { error } = await supabase
     .from('messages')
     .insert([{ conversation_id: conversationId, sender_id: senderId, message }]);
@@ -20,12 +20,12 @@ export const sendMessage = async (conversationId: number, senderId: string, mess
   }
 };
 
-export const fetchMessages = async (conversationId: number) => {
+export const fetchMessages = async (conversationId: string) => {
   const { data, error } = await supabase
     .from('messages')
     .select('*')
     .eq('conversation_id', conversationId)
-    .order('created_at', { ascending: true });
+    .order('created_at', { ascending: false });
 
 
 
@@ -44,7 +44,7 @@ export const fetchMessages = async (conversationId: number) => {
 };
 
 
-export const subscribeToMessages = (conversationId: number, callback: (message: any) => void) => {
+export const subscribeToMessages = (conversationId: string, callback: (message: any) => void) => {
   const channel = supabase
     .channel(`messages-conversation-${conversationId}`)
     .on(
@@ -72,8 +72,15 @@ export const subscribeToConversations = (
   userType: string,
   callback: (conversation: any) => void
 ) => {
-  if (!userId) return;
+  if (!userId) {
+    console.log("no user");
+    return;
+  };
 
+  console.log(userType)
+  const filter = userType === "farmer" ? `farmer_id=eq.${userId}`: `buyer_id=eq.${userId}`
+
+  console.log(`subscribe to conversation-${userId}`);
   const channel = supabase
     .channel(`conversations-${userId}`)
     .on(
@@ -82,7 +89,8 @@ export const subscribeToConversations = (
         event: 'INSERT',
         schema: 'public',
         table: 'conversations',
-        filter: `${userType === "farmer" ? 'farmer_id=eq'+userId : 'buyer_id=eq.'+userId }`, // Correct filter syntax
+        filter
+        // filter: `${userType === "farmer" ? 'farmer_id=eq.'+userId : 'buyer_id=eq.'+userId }`, // Correct filter syntax
       },
       (payload) => {
         console.log('New conversation payload:', payload);
@@ -90,6 +98,8 @@ export const subscribeToConversations = (
       }
     )
     .subscribe();
+
+    console.log('Conversation status ', channel);
 
   return () => {
     supabase.removeChannel(channel);

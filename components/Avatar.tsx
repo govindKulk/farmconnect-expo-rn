@@ -15,7 +15,7 @@ interface AvatarProps {
 
 const Avatar: FC<AvatarProps> = ({ rounded = theme.radius.md, size = hp(4.5), style, uri }) => {
 
-
+    
     return (
         <Image
             source={getUserImageSrc(uri)}
