@@ -92,6 +92,15 @@ export default function TabLayout() {
             href: null
           }}
         />
+        <Tabs.Screen
+          name="single_chat"
+        
+          options={{
+            headerShown: false,
+            
+            href: null
+          }}
+        />
       </Tabs>
     </ScreenWrapper>
 

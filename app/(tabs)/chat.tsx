@@ -1,9 +1,14 @@
 import { Avatar, Header } from "@/components";
 import { ThemedText } from "@/components/ThemedText";
 import { theme } from "@/constants";
+import { useAuth } from "@/contexts/AuthContext";
 import { hp, wp } from "@/helpers";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { Text, View, FlatList, TouchableOpacity } from "react-native";
+import { supabase } from "@/lib/supabase";
+import { subscribeToConversations } from "@/services/messageService";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { Text, View, FlatList, TouchableOpacity, Alert } from "react-native";
 
 
 
@@ -21,6 +26,45 @@ export default function ChatScreen() {
 
 
     const textColor  = useThemeColor({light: "black", dark: "white"}, "text");
+
+    const router = useRouter();
+    const {user} = useAuth();
+
+    const [conversations, setConversations] = useState<any>();
+    const getAllConversations = async function () {
+        const {data, error} = await supabase.from('conversations').select('*, buyer: users!conversations_buyer_id_fkey (name)').eq('farmer_id', user?.id);
+        if(error){
+            console.log(error);
+            Alert.alert("Error while loading conversations! Please try again later");
+            return;
+        }
+        // console.log(data);
+        setConversations(data);
+    }
+    useEffect(() => {
+        getAllConversations();
+        const unsubscribe = subscribeToConversations(user?.id,"farmer",  (conversation) => {
+            console.log("new ", conversation)
+            setConversations((prev: any) => {
+                return [
+                    ...prev,
+                    conversation
+                ]
+            })
+        })
+
+        return () => {
+            if(unsubscribe){
+                unsubscribe();
+            }
+        }
+    }, [])
+
+    useEffect(() => {
+
+        console.log("conversations state", conversations);
+    }, [conversations])
+
     return (
 
         <View
@@ -36,7 +80,9 @@ export default function ChatScreen() {
                 }}
                 renderItem={({ item }) => (
 
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => router.push('/(tabs)/single_chat')}
+                    >
                         <View
                             style={{
                                 gap: 5,

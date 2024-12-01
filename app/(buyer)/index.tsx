@@ -97,7 +97,7 @@ const BuyerHomeScreen = () => {
     const onTextChange = (value: string) => {
         searchRef.current = value;
         if (true){
-            let filteredProducts = productsCopy.filter(p => p.crop.name == value);
+            let filteredProducts = productsCopy.filter((p: any) => p.crop.name == value);
             console.log(productsCopy.length)
             if(filteredProducts.length > 0){
 
