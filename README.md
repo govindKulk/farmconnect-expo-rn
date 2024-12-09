@@ -1,3 +1,3 @@
-# FarmConnect - an online marketplace for farmers 👋
+# FarmConnect - an online marketplace for farmers 👨‍🌾
 
 Readme editing in progress...
