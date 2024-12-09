@@ -8,7 +8,7 @@ export const getUserImageSrc = (imagePath?: string | null, isProduct = false) =>
     if (imagePath) {
         return getSupabaseFileUrl(imagePath);
     } else {
-        return !isProduct ? require('@/assets/images/defaultUser.png') : require('@/assets/images/tomato.jpg');
+        return !isProduct ? require('@/assets/images/defaultuser.webp') : require('@/assets/images/tomato.jpg');
     }
 };
 
