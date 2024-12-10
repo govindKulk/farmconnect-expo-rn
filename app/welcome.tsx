@@ -12,12 +12,14 @@ const Welcome = () => {
 
     const router = useRouter();
     const headingTextColor = useThemeColor({light: theme.colors.textDark, dark: theme.colors.primaryDark}, "text");
+    const bgColor = useThemeColor({light: "white", dark: "rgb(26, 25, 25)"}, "background");
    
+
     
     
     return (
         <ScreenWrapper
-        
+            bg={bgColor}
         >
             <StatusBar style="dark" />
 

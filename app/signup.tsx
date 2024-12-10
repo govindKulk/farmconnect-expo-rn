@@ -9,6 +9,7 @@ import { theme } from '@/constants';
 import { hp, wp } from '@/helpers';
 import { supabase } from '@/lib/supabase';
 import CustomPicker from '@/components/CustomPicker';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 const options = [
     {
@@ -58,8 +59,10 @@ const SignUp: FC = () => {
         }
     };
 
+    const bgColor = useThemeColor({}, "background")
+    const color = useThemeColor({}, "text")
     return (
-        <ScreenWrapper bg={'white'}>
+        <ScreenWrapper bg={bgColor}>
             <StatusBar style={'dark'} />
 
             <View style={styles.container}>
@@ -67,13 +70,17 @@ const SignUp: FC = () => {
 
                 {/** Welcome */}
                 <View>
-                    <Text style={styles.welcomeText}>{"Let's"}</Text>
-                    <Text style={styles.welcomeText}>{'Get Started'}</Text>
+                    <Text style={[styles.welcomeText,{
+                        color
+                    }]}>{"Let's"}</Text>
+                    <Text style={[styles.welcomeText,{
+                        color
+                    }]}>{'Get Started'}</Text>
                 </View>
 
                 {/** Form */}
                 <View style={styles.form}>
-                    <Text style={{ color: theme.colors.text, fontSize: hp(1.5) }}>
+                    <Text style={{ color, fontSize: hp(1.5) }}>
                         {'Please fill the details to create an account'}
                     </Text>
 
@@ -107,7 +114,7 @@ const SignUp: FC = () => {
 
                     <View>
 
-                        <Text style={{ color: theme.colors.text, fontSize: hp(1.5), marginBottom: hp(1) }}>{'Register as ? '}</Text>
+                        <Text style={{ color, fontSize: hp(1.5), marginBottom: hp(1) }}>{'Register as ? '}</Text>
                         <CustomPicker
                             options={options}
                             selectedValue={selectedUserType}
@@ -122,7 +129,9 @@ const SignUp: FC = () => {
 
                 {/** Footer */}
                 <View style={styles.footer}>
-                    <Text style={styles.footerText}>{'Already have an account!'}</Text>
+                    <Text style={[styles.footerText, {
+                        color
+                    }]}>{'Already have an account!'}</Text>
                     <Pressable onPress={() => router.push('/login')}>
                         <Text
                             style={[

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable, Alert } from 'react-native'
 import React, { FC } from 'react'
 import { theme } from '@/constants'
 import { hp, wp } from '@/helpers'
@@ -13,6 +13,8 @@ import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useRouter } from 'expo-router'
 import { getUserImageSrc } from '@/services'
+import { createConversations } from '@/services/messageService'
+import { useAuth } from '@/contexts/AuthContext'
 
 export interface Product {
     title: string;
@@ -37,6 +39,24 @@ const BuyerProductCard: FC<BuyerProductCardProps> = ({
     }, "background")
 
     const router = useRouter();
+
+    const {user} = useAuth()
+    async function handleChatClick() {
+        console.log('clicked')
+        const data = await createConversations(product?.user?.id , user?.id );
+        if(data?.success){
+            // console.log(data.data);
+            if(data?.data){
+                router.push({
+                        pathname: '/(buyer)/single_chat',
+                        params: {
+                            conversationId: data.data.id as string
+                        }
+                    })
+
+            }
+        }
+    }
     return (
         <Pressable
         onPress={() => router.push({
@@ -123,6 +143,7 @@ const BuyerProductCard: FC<BuyerProductCardProps> = ({
                                 padding: 2
 
                             }}
+                            onPress={handleChatClick}
 
                         >
                             <Entypo name="chat" size={24} color="#3cb5e0" />

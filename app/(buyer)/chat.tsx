@@ -104,7 +104,7 @@ export default function ChatScreen() {
 
                     <TouchableOpacity
                     onPress={() => router.push({
-                        pathname: '/(tabs)/single_chat',
+                        pathname: '/(buyer)/single_chat',
                         params: {
                             conversationId: item.id
                         }

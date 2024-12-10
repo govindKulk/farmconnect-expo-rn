@@ -23,6 +23,7 @@ import ThreeDotsHorizontal from './ThreeDotsHorizontal';
 import User from './User';
 import Video from './Video';
 import { theme } from '@/constants';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 interface IconProps extends SvgProps {
     name: string;
@@ -80,9 +81,10 @@ const icons = {
 
 const Icon: FC<IconProps> = ({ name, ...props }) => {
     const IconComponent = icons[name as keyof IconList];
+    const iconColor = useThemeColor({}, "text");
     return (
         <IconComponent
-            color={theme.colors.textLight}
+            color={iconColor}
             height={props.size || 24}
             strokeWidth={props.strokeWidth || 1.9}
             width={props.size || 24}

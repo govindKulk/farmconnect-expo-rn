@@ -3,6 +3,8 @@ import { StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } fro
 
 import { theme } from '@/constants';
 import { hp } from '@/helpers/';
+import { Colors } from '@/constants/Colors';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 interface TextFieldProps extends TextInputProps {
     containerStyle?: StyleProp<ViewStyle>;
@@ -10,15 +12,19 @@ interface TextFieldProps extends TextInputProps {
 }
 
 const TextField = forwardRef<TextInput, TextFieldProps>(({ containerStyle, icon, ...props }, ref) => {
+
+    const textColor = useThemeColor({}, "text");
     return (
-        <View style={[styles.container, containerStyle]}>
+        <View style={[styles.container, containerStyle, {
+            borderColor: textColor
+        }]}>
             {icon && icon}
 
             <TextInput
                 
-                placeholderTextColor={theme.colors.textLight}
+                placeholderTextColor={textColor}
                 ref={ref}
-                style={{ flex: 1, paddingHorizontal: 0 }}
+                style={{ flex: 1, paddingHorizontal: 0, color: textColor }}
                 {...props}
             />
         </View>
@@ -28,7 +34,6 @@ const TextField = forwardRef<TextInput, TextFieldProps>(({ containerStyle, icon,
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        borderColor: theme.colors.text,
         borderCurve: 'continuous',
         borderRadius: theme.radius.xxl,
         borderWidth: 0.4,

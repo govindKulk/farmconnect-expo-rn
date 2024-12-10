@@ -71,6 +71,15 @@ export default function TabLayout() {
           }}
         />
 
+        <Tabs.Screen
+          name="single_chat"
+          options={{
+            href: null,
+            headerShown: false,
+
+          }}
+        />
+
 <Tabs.Screen
           name="editprofile"
         

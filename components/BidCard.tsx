@@ -12,6 +12,9 @@ import Avatar from './Avatar'
 import Entypo from '@expo/vector-icons/Entypo';
 import { supabase } from '@/lib/supabase'
 import { getUserImageSrc } from '@/services'
+import { useRouter } from 'expo-router'
+import { createConversations } from '@/services/messageService'
+import { useAuth } from '@/contexts/AuthContext'
 
 export interface Product {
     title: string;
@@ -67,6 +70,26 @@ const BidCard: FC<BidCardProps> = ({
         Alert.alert("Successfully accepted bid");
 
     }
+
+    const router = useRouter();
+    const {user} = useAuth();
+
+    async function handleChatClick() {
+        console.log('clicked')
+        const data = await createConversations(user?.id , bid?.buyer?.id );
+        if(data?.success){
+            // console.log(data.data);
+            if(data?.data){
+                router.push({
+                        pathname: '/(tabs)/single_chat',
+                        params: {
+                            conversationId: data.data.id as string
+                        }
+                    })
+
+            }
+        }
+    }
     return (
  <View
  style={{
@@ -76,8 +99,9 @@ const BidCard: FC<BidCardProps> = ({
            <View
             style= {[styles.cardContainer, {
                 backgroundColor: bgColor,
-                borderTopEndRadius: 18,
-                borderBottomEndRadius: (bid?.status == "accepted" ? 0 : 18),
+                borderRadius: 18,
+                borderBottomEndRadius: (bid?.status  ? 0 : 18),
+                borderBottomStartRadius: (bid?.status ? 0 : 18),
             
             }]}
         >
@@ -150,6 +174,7 @@ const BidCard: FC<BidCardProps> = ({
                         <Entypo name="check" size={24} color="green" />
                     </TouchableOpacity>
                     <TouchableOpacity
+                        onPress={handleChatClick}
                         style={{
                             borderColor: '#3cb5e0',
                             borderWidth: 1,

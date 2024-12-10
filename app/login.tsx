@@ -9,6 +9,7 @@ import { theme } from '@/constants';
 import { hp, wp } from '@/helpers/common';
 import { supabase } from '@/lib/supabase';
 import CustomPicker from '@/components/CustomPicker';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 
 const options = [
@@ -88,8 +89,11 @@ const Login = () => {
         }
     };
 
+    const bgColor = useThemeColor({}, "background")
+    const color = useThemeColor({}, "text")
+
     return (
-        <ScreenWrapper bg={'white'}>
+        <ScreenWrapper bg={bgColor}>
             <StatusBar style={'dark'} />
 
             <View style={styles.container}>
@@ -97,13 +101,17 @@ const Login = () => {
 
                 {/** Welcome */}
                 <View>
-                    <Text style={styles.welcomeText}>{'Hey,'}</Text>
-                    <Text style={styles.welcomeText}>{'Welcome Back'}</Text>
+                    <Text style={[styles.welcomeText, {
+                        color
+                    }]}>{'Hey,'}</Text>
+                    <Text style={[styles.welcomeText, {
+                        color
+                    }]}>{'Welcome Back'}</Text>
                 </View>
 
                 {/** Form */}
                 <View style={styles.form}>
-                    <Text style={{ color: theme.colors.text, fontSize: hp(1.5) }}>{'Please login to continue'}</Text>
+                    <Text style={{ color, fontSize: hp(1.5) }}>{'Please login to continue'}</Text>
 
                     {/** Email */}
                     <TextField
@@ -129,7 +137,7 @@ const Login = () => {
                     <View>
 
                         {/** Forgot password */}
-                        <Text style={{ color: theme.colors.text, fontSize: hp(1.5), marginBottom: hp(1) }}>{'Log in as ? '}</Text>
+                        <Text style={{ color, fontSize: hp(1.5), marginBottom: hp(1) }}>{'Log in as ? '}</Text>
                         <CustomPicker
                             options = {options}
                             selectedValue={selectedUserType}
@@ -139,7 +147,7 @@ const Login = () => {
                     </View>
 
                     {/** Forgot password */}
-                    <Text style={styles.forgotPassword}>{'Forgot Password?'}</Text>
+                    {/* <Text style={styles.forgotPassword}>{'Forgot Password?'}</Text> */}
 
                     {/** Button Submit */}
                     <Button loading={loading} onPress={onSubmit} title={'Login'} />
@@ -147,7 +155,9 @@ const Login = () => {
 
                 {/** Footer */}
                 <View style={styles.footer}>
-                    <Text style={styles.footerText}>{"Don't have an account?"}</Text>
+                    <Text style={[styles.footerText, {
+                        color
+                    }]}>{"Don't have an account?"}</Text>
                     <Pressable onPress={() => router.push('/signup')}>
                         <Text
                             style={[

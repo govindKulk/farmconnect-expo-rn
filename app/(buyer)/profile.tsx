@@ -21,6 +21,8 @@ interface UserHeader {
 
 const UserHeader: FC<UserHeader> = ({ handleLogout, router, user }) => {
     const bgColor = useThemeColor({}, "background");
+    const color = useThemeColor({}, "text");
+
 
     return (
         <View style={{ flex: 1, paddingHorizontal: wp(4), backgroundColor: bgColor }}>
@@ -47,40 +49,40 @@ const UserHeader: FC<UserHeader> = ({ handleLogout, router, user }) => {
                     {/** Username and address */}
                     <View style={{ alignItems: 'center', gap: 4 }}>
   
-                        <Text style={styles.userName}>{user && user.name}</Text>
-                        <Text style={styles.infoText}>Address: --</Text>
+                        <Text style={[styles.userName, {color}]}>{user && user.name}</Text>
+                        <Text style={[styles.infoText, {color}]}>Address: --</Text>
                     </View>
 
                     {/** Email, phone & bio */}
-                    <View style={{ gap: 10 }}>
+                    <View style={{ gap: 10, alignItems: 'center' }}>
                         {/** Email */}
                         <View style={styles.info}>
-                            <Icon color={theme.colors.textLight} name={'mail'} size={20} />
-                            <Text style={styles.infoText}>{user && user.email}</Text>
+                            <Icon color={color} name={'mail'} size={20} />
+                            <Text style={[styles.infoText, {color}]}>{user && user.email}</Text>
                         </View>
 
                         {/** Phone */}
                         {user && user.phonenumber && (
                             <View style={styles.info}>
-                                <Icon color={theme.colors.textLight} name={'call'} size={20} />
-                                <Text style={styles.infoText}>Phone: {user.phonenumber}</Text>
+                                <Icon color={color} name={'call'} size={20} />
+                                <Text style={[styles.infoText, {color}]}>Phone: {user.phonenumber}</Text>
                             </View>
                         )}
                         {user && user.village && (
                             <View style={styles.info}>
-                                <Icon color={theme.colors.textLight} name={'location'} size={20} />
-                                <Text style={styles.infoText}>Village: {user.village}</Text>
+                                <Icon color={color} name={'location'} size={20} />
+                                <Text style={[styles.infoText, {color}]}>Village: {user.village}</Text>
                             </View>
                         )}
                         {user && user.city && (
                             <View style={styles.info}>
-                                <Icon color={theme.colors.textLight} name={'location'} size={20} />
-                                <Text style={styles.infoText}>City: {user.city}</Text>
+                                <Icon color={color} name={'location'} size={20} />
+                                <Text style={[styles.infoText, {color}]}>City: {user.city}</Text>
                             </View>
                         )}
 
                         {/** Bio */}
-                        {user && user.bio && <Text style={styles.infoText}>{user.bio}</Text>}
+                        {user && user.bio && <Text style={[styles.infoText, {color}]}>{user.bio}</Text>}
                     </View>
                 </View>
             </View>

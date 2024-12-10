@@ -24,7 +24,7 @@ const Header: FC<HeaderProps> = ({ mb = 10, showBackButton = true, title }) => {
                 </View>
             )}
 
-            <Text style={[{color: textColor}, styles.title]}>{title || ''}</Text>
+            <Text style={[ styles.title, {color: textColor}]}>{title || ''}</Text>
         </View>
     );
 };

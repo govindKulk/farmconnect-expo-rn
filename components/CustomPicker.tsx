@@ -6,6 +6,7 @@ import { hp } from '@/helpers/';
 
 import { Picker, PickerItemProps } from '@react-native-picker/picker';
 import { Text } from 'react-native';
+import { useThemeColor } from '@/hooks/useThemeColor';
 interface CustomPickerProps extends PickerItemProps {
     containerStyle?: StyleProp<ViewStyle>;
     icon?: ReactNode;
@@ -20,6 +21,7 @@ interface CustomPickerProps extends PickerItemProps {
 
 const CustomPicker = forwardRef<TextInput, CustomPickerProps>(({ containerStyle, icon, selectedValue, setselectedValue, labelText, options, ...props }, ref) => {
 
+    const color = useThemeColor({}, "text");
     return (
         <View>
 
@@ -31,7 +33,7 @@ const CustomPicker = forwardRef<TextInput, CustomPickerProps>(({ containerStyle,
                     // placeholderTextColor={theme.colors.textLight}
                     selectedValue={selectedValue}
                     onValueChange={(value, i) => setselectedValue(value)}
-                    style={{ flex: 1, paddingHorizontal: 0 }}
+                    style={{ flex: 1, paddingHorizontal: 0, color }}
                     {...props}
                 >
 

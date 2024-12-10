@@ -13,6 +13,8 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'expo-router'
 import { getUserImageSrc } from '@/services'
+import { useAuth } from '@/contexts/AuthContext'
+import { createConversations } from '@/services/messageService'
 
 export interface Product {
     title: string;
@@ -46,6 +48,25 @@ const BuyerBidCard: FC<BuyerBidCardProps> = ({
         Alert.alert("Successfully deleted bid");
         onBidCancel();
     }
+
+    const router = useRouter();
+    const {user} = useAuth()
+    async function handleChatClick() {
+        console.log('clicked')
+        const data = await createConversations(bid?.farmer?.id , user?.id );
+        if(data?.success){
+            // console.log(data.data);
+            if(data?.data){
+                router.push({
+                        pathname: '/(buyer)/single_chat',
+                        params: {
+                            conversationId: data.data.id as string
+                        }
+                    })
+
+            }
+        }
+    }
     return (
         <View
         style={{
@@ -55,7 +76,9 @@ const BuyerBidCard: FC<BuyerBidCardProps> = ({
             <View
                 style={[styles.cardContainer, {
                     backgroundColor: bgColor,
-                    borderRadius: 16
+                    borderRadius: 18,
+                    borderBottomEndRadius: (bid?.status  ? 0 : 18),
+                    borderBottomStartRadius: (bid?.status ? 0 : 18),
                 }]}
             >
                 {/* left col */}
@@ -114,6 +137,7 @@ const BuyerBidCard: FC<BuyerBidCardProps> = ({
 
 
                         <TouchableOpacity
+                            onPress={handleChatClick}
                             style={{
                                 borderColor: '#3cb5e0',
                                 borderWidth: 1,

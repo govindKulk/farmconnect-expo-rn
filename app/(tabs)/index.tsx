@@ -19,6 +19,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { Entypo } from '@expo/vector-icons';
 import CustomPicker from '@/components/CustomPicker';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 
 const data = [
@@ -119,6 +120,9 @@ const submitBid = async () => {
     }
     fetchProducts();
   }, []))
+
+  const bgColor = useThemeColor({}, "background")
+  const color = useThemeColor({}, "text")
   return (
 
 
@@ -126,26 +130,20 @@ const submitBid = async () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: "white"
+        backgroundColor: bgColor
       }}
     >
       <ScrollView
         contentContainerStyle={{
           gap: 8,
           paddingVertical: 6,
-          flex: 1,
           paddingHorizontal: wp(5)
         }}
+
       >
 
         <Header showBackButton={false} title='Your Produce' />
-        {/* <FlatList
-            data={data}
-            renderItem={({item}) => (<ProductCard title={item.title} description={item.description} price={item.price}/>)}
-            contentContainerStyle={{
-              gap: 8
-            }}
-            /> */}
+
         {
           products.length > 0 ? products.map((item, key) => (<ProductCard key={key} title={item.crop.name} description={item.description} price={item.expected_rate} product={item} imgSource={item.source} openModal={() => openModal(item)}/>)) : <View
             style={{
