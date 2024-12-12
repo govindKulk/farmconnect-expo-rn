@@ -12,6 +12,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import * as ImagePicker from 'expo-image-picker'
 import { getUserImageSrc, uploadFile } from '@/services'
+import { useThemeColor } from '@/hooks/useThemeColor'
 
 
 const cropCategories = ["Cereals",
@@ -124,6 +125,8 @@ const AddProduce = () => {
           productPrice.current = p.price;
           setSelectedCrop(p.crop_id)
           setSelectedImage(p.cover_image);
+
+          setProductDescription(p.description);
         } else {
           console.log("error while fetching single record >> ", res);
         }
@@ -162,8 +165,8 @@ const AddProduce = () => {
       expected_rate: productPrice.current,
       quantity: productQuantity.current,
       unit: selectedUnit,
-      description: productDescription.current,
-      cover_image: null
+      description: productDescriptionState,
+      is_organic: selectedIsOrganic 
     };
 
     if (image.includes('///')) {
@@ -216,13 +219,16 @@ const AddProduce = () => {
     const {error} = await supabase.from('products').delete().eq("id", params.productId);
     if(error){
       setLoading(false);
-      Alert.alert("Error while deleting bid");
+      Alert.alert("Error while deleting product");
       return;
     }
     setLoading(false);
-    Alert.alert("Successfully deleted bid");
+    Alert.alert("Successfully deleted product");
     router.back();
 }
+
+const bgColor = useThemeColor({}, "background")
+const color = useThemeColor({}, "text")
   return (
     <ScreenWrapper>
       <View
@@ -358,10 +364,13 @@ const AddProduce = () => {
 
             <TextField
               icon={<Icon name={'lock'} size={26} strokeWidth={1.6} />}
-              onChangeText={(value) => (productDescription.current = value)}
+              onChangeText={(value) => (setProductDescription(value))}
               multiline={true}
+              value={productDescriptionState}
               placeholder={'Describe your product'}
             />
+
+
 
             <View
               style={{
@@ -369,8 +378,12 @@ const AddProduce = () => {
                 justifyContent: 'flex-start'
               }}
             >
-              <Pressable onPress={onPickImage} style={styles.cameraIcon}>
-                <Text>
+              <Pressable onPress={onPickImage} style={[styles.cameraIcon, {borderColor: color}]}>
+                <Text
+                style={{
+                  color
+                }}
+                >
                   Upload Photo
                 </Text>
                 <Icon name={'camera'} size={20} strokeWidth={2.5} />
@@ -420,7 +433,7 @@ const AddProduce = () => {
             }
 
             {/** Button Submit */}
-            <Button loading={loading} onPress={onSubmit} title={'Add'} />
+            <Button loading={loading} onPress={onSubmit} title={params.productId ? 'Update' : 'Add'} />
           </View>
 
 

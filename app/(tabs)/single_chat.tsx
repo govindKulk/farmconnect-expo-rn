@@ -8,6 +8,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { hp } from '@/helpers';
 import { theme } from '@/constants';
 import { useChatContext } from '@/contexts/ChatContext';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 const ChatScreen = () => {
     const params = useLocalSearchParams<{ conversationId: string }>();
@@ -86,7 +87,9 @@ const ChatScreen = () => {
     };
 
     console.log("current conversations: ", currentConversation)
-
+    const headerBgColor = useThemeColor({light: "#dfdfdf", dark: "#232323"}, "background")
+    const bgColor = useThemeColor({light: "white", dark: "#232323"}, "background")
+    const textColor = useThemeColor({}, "text")
     return (
         <View
         style={{
@@ -95,7 +98,7 @@ const ChatScreen = () => {
         >
             <View style={{
                 flexDirection: "row",
-                backgroundColor: '#dfdfdf',
+                backgroundColor: headerBgColor,
                 paddingVertical: hp(1.5),
                 justifyContent: "center",
                 alignItems: "center",
@@ -105,7 +108,8 @@ const ChatScreen = () => {
                 <Text
                 style={{
                     fontSize: hp(2),
-                    fontWeight: theme.fonts.semibold
+                    fontWeight: theme.fonts.semibold,
+                    color: textColor
                 }}
                 >
                     {user?.user_type === "farmer" ? currentConversation?.buyer?.name: currentConversation?.farmer?.name}

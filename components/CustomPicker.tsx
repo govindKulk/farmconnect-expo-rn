@@ -22,11 +22,16 @@ interface CustomPickerProps extends PickerItemProps {
 const CustomPicker = forwardRef<TextInput, CustomPickerProps>(({ containerStyle, icon, selectedValue, setselectedValue, labelText, options, ...props }, ref) => {
 
     const color = useThemeColor({}, "text");
+    const bgColor = useThemeColor({}, "background");
     return (
-        <View>
+        <View
+        >
 
-          {labelText &&  <Text  style={{ color: theme.colors.text, fontSize: hp(1.5), marginBottom: hp(1) }}>{labelText}</Text>}
-            <View style={[styles.container, containerStyle]}>
+          {labelText &&  <Text  style={{ color, fontSize: hp(1.5), marginBottom: hp(1) }}>{labelText}</Text>}
+            <View style={[styles.container, containerStyle, {
+                borderColor: color,
+                backgroundColor: bgColor
+            }]}>
                 {icon && icon}
 
                 <Picker

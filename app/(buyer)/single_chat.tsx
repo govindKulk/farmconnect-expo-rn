@@ -8,6 +8,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { hp } from '@/helpers';
 import { theme } from '@/constants';
 import { useChatContext } from '@/contexts/ChatContext';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 const ChatScreen = () => {
     const params = useLocalSearchParams<{ conversationId: string }>();
@@ -16,7 +17,7 @@ const ChatScreen = () => {
 
     if (!user) return;
 
-    const {conversations} = useChatContext();
+    const { conversations } = useChatContext();
 
     const [messages, setMessages] = useState<any>([]);
     const [currentConversation, setCurrentConversation] = useState<any>();
@@ -87,28 +88,32 @@ const ChatScreen = () => {
 
     console.log("current conversations: ", currentConversation)
 
+    const headerBgColor = useThemeColor({ light: "#dfdfdf", dark: "#232323" }, "background")
+    const bgColor = useThemeColor({ light: "white", dark: "#232323" }, "background")
+    const textColor = useThemeColor({}, "text")
     return (
         <View
-        style={{
-            flex: 1
-        }}
+            style={{
+                flex: 1
+            }}
         >
             <View style={{
                 flexDirection: "row",
-                backgroundColor: '#dfdfdf',
+                backgroundColor: headerBgColor,
                 paddingVertical: hp(1.5),
                 justifyContent: "center",
                 alignItems: "center",
                 gap: 10
             }}>
-                <Avatar size={50} uri={user?.user_type === "farmer" ? currentConversation?.buyer?.image: currentConversation?.farmer?.image} />
+                <Avatar size={50} uri={user?.user_type === "farmer" ? currentConversation?.buyer?.image : currentConversation?.farmer?.image} />
                 <Text
-                style={{
-                    fontSize: hp(2),
-                    fontWeight: theme.fonts.semibold
-                }}
+                    style={{
+                        fontSize: hp(2),
+                        fontWeight: theme.fonts.semibold,
+                        color: textColor
+                    }}
                 >
-                    {user?.user_type === "farmer" ? currentConversation?.buyer?.name: currentConversation?.farmer?.name}
+                    {user?.user_type === "farmer" ? currentConversation?.buyer?.name : currentConversation?.farmer?.name}
                 </Text>
             </View>
             <GiftedChat

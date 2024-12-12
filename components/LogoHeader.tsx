@@ -10,13 +10,13 @@ import { hp } from "@/helpers";
 export default function LogoHeader() {
 
     const colorScheme = useColorScheme();
-    const bgColor = useThemeColor({light: "white", dark: theme.colors.primary}, "background");
+    const bgColor = useThemeColor({light: "#ececec", dark: theme.colors.primary}, "background");
     const textColor = useThemeColor({dark: "white", light: theme.colors.primary}, "text");
     return (
         <ThemedView
         style={{
           backgroundColor: bgColor,
-          
+          elevation: 5,
           paddingVertical: hp(1.5),
           flexDirection: 'row',
           justifyContent: "center"

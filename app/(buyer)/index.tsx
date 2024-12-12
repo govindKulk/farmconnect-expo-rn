@@ -12,6 +12,7 @@ import { Entypo } from '@expo/vector-icons'
 import CustomPicker from '@/components/CustomPicker'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
+import { useThemeColor } from '@/hooks/useThemeColor'
 
 const BuyerHomeScreen = () => {
 
@@ -109,12 +110,15 @@ const BuyerHomeScreen = () => {
 
         }
     }
-
+      const bgColor = useThemeColor({}, "background")
+      const color = useThemeColor({}, "text")
 
     return (
-        <ScreenWrapper>
+
             <KeyboardAvoidingView
-                style={styles.container}
+                style={[styles.container, {
+                    backgroundColor: bgColor
+                }]}
             >
 
                 {/* Search Bar */}
@@ -167,31 +171,61 @@ const BuyerHomeScreen = () => {
 
                     {/* Bid Modal */}
                     {isModalVisible && (
-                        <Modal transparent={true} visible={isModalVisible} animationType="slide">
+                        <Modal transparent={true}
+                        style={{
+                            position: "relative"
+                        }}
+                        visible={isModalVisible} animationType="slide">
 
-                            <View style={styles.modalContainer}>
+                            <View style={[styles.modalContainer, {
+                                backgroundColor: bgColor,
+                                paddingVertical: hp(2),
+                                paddingHorizontal: wp(3),
+                                alignItems: 'center',
+                                justifyContent: "center",
+                                gap: 10
+                            }]}>
 
 
                                 <TouchableOpacity
                                     style={{
-                                        borderColor: 'black ',
+                                        borderColor: color,
                                         borderWidth: 1,
                                         borderRadius: wp(100),
                                         padding: 2,
-                                        alignSelf: 'flex-end'
-
+                                        alignSelf: 'flex-end',
+                                        position: "absolute",
+                                        top: 10,
+                                        right: 10
                                     }}
                                     onPress={closeModal}
                                 >
-                                    <Entypo name="cross" size={24} color="black" />
+                                    <Entypo name="cross" size={24} color={color} />
                                 </TouchableOpacity>
 
+                                    <Text
+                                    style={{
+                                        color,
+                                        fontSize: 24,
+                                        fontWeight: 'bold'
+                                    }}
+                                    >
+                                        Place Bid
+                                    </Text>
                         
                                     <TextInput
                                         value={bidPrice}
                                         onChangeText={(value) => setBidPrice(value)}
                                         placeholder="Enter bid price"
-                                        style={styles.input}
+                                        placeholderTextColor={color}
+                                        style={[styles.input, {
+                                            backgroundColor: bgColor,
+                                            color,
+                                            borderColor: color,
+                                            borderWidth: 1,
+                                            borderRadius: 12
+
+                                        }]}
                                         keyboardType="numeric"
 
                                     />
@@ -200,8 +234,16 @@ const BuyerHomeScreen = () => {
                                     multiline={true}
                                     value={message}
                                     onChangeText={(value) => setMessage(value)}
+                                    placeholderTextColor={color}
                                     placeholder="Enter message"
-                                    style={styles.input}
+                                    style={[styles.input, {
+                                            backgroundColor: bgColor,
+                                            color,
+                                            borderColor: color,
+                                            borderWidth: 1,
+                                            borderRadius: 12
+
+                                        }]}
 
                                 />
                                 <TextInput
@@ -209,12 +251,21 @@ const BuyerHomeScreen = () => {
                                     value={quantiy}
                                     onChangeText={(value) => setQuantity(value)}
                                     keyboardType='numeric'
+                                    placeholderTextColor={color}
                                     placeholder="Bid Quantity"
-                                    style={styles.input}
+                                    style={[styles.input, {
+                                            backgroundColor: bgColor,
+                                            color,
+                                            borderColor: color,
+                                            borderWidth: 1,
+                                            borderRadius: 12
+
+                                        }]}
 
                                 />
 
                                 <CustomPicker
+                                
                                 options={[
                                     {
                                         value: "partial",
@@ -258,7 +309,7 @@ const BuyerHomeScreen = () => {
 
 
             </KeyboardAvoidingView>
-        </ScreenWrapper>
+
     )
 }
 
@@ -266,7 +317,8 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        paddingHorizontal: wp(4.5)
+        paddingHorizontal: wp(4.5),
+        paddingVertical: hp(2)
     },
     productList: {
         gap: 20,

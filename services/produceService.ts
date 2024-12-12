@@ -89,8 +89,8 @@ export const getSingleProduct = async (productId: string) => {
                 .single()
 
             if (error) {
-                console.log('Fetch posts error >>:', error);
-                return { msg: 'Could not fetch the posts', success: false };
+                console.log('Fetch product error >>:', error);
+                return { msg: 'Could not fetch the product', success: false };
             }
 
             return { data, success: true };

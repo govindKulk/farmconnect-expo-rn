@@ -24,6 +24,7 @@ const UserHeader: FC<UserHeader> = ({ handleLogout, router, user }) => {
     const color = useThemeColor({}, "text");
 
 
+    const iconBg = useThemeColor({ light: "white", dark: "rgba(165, 157, 157, 0.7)" }, "background")
     return (
         <View style={{ flex: 1, paddingHorizontal: wp(4), backgroundColor: bgColor }}>
 
@@ -39,18 +40,22 @@ const UserHeader: FC<UserHeader> = ({ handleLogout, router, user }) => {
             <View style={styles.container}>
                 <View style={{ gap: 15 }}>
                     <View style={styles.avatarContainer}>
-                        <Avatar rounded={theme.radius.xxl} size={hp(12)} uri={user?.image}  />
+                        <Avatar rounded={theme.radius.xxl} size={hp(12)} uri={user?.image} />
 
-                        <Pressable style={styles.editIcon} onPress={() => router.push('./editprofile')}>
-                            <Icon name={'edit'} size={20} strokeWidth={2.5} />
+                        <Pressable style={[styles.editIcon, {
+                            backgroundColor: iconBg
+                        }]} onPress={() => router.push('./editprofile')}>
+                            <Icon name={'edit'} size={20} strokeWidth={2.5} 
+                            color={color}
+                            />
                         </Pressable>
                     </View>
 
                     {/** Username and address */}
                     <View style={{ alignItems: 'center', gap: 4 }}>
-  
-                        <Text style={[styles.userName, {color}]}>{user && user.name}</Text>
-                        <Text style={[styles.infoText, {color}]}>Address: --</Text>
+
+                        <Text style={[styles.userName, { color }]}>{user && user.name}</Text>
+                        <Text style={[styles.infoText, { color }]}>Address: --</Text>
                     </View>
 
                     {/** Email, phone & bio */}
@@ -58,31 +63,31 @@ const UserHeader: FC<UserHeader> = ({ handleLogout, router, user }) => {
                         {/** Email */}
                         <View style={styles.info}>
                             <Icon color={color} name={'mail'} size={20} />
-                            <Text style={[styles.infoText, {color}]}>{user && user.email}</Text>
+                            <Text style={[styles.infoText, { color }]}>{user && user.email}</Text>
                         </View>
 
                         {/** Phone */}
                         {user && user.phonenumber && (
                             <View style={styles.info}>
                                 <Icon color={color} name={'call'} size={20} />
-                                <Text style={[styles.infoText, {color}]}>Phone: {user.phonenumber}</Text>
+                                <Text style={[styles.infoText, { color }]}>Phone: {user.phonenumber}</Text>
                             </View>
                         )}
                         {user && user.village && (
                             <View style={styles.info}>
                                 <Icon color={color} name={'location'} size={20} />
-                                <Text style={[styles.infoText, {color}]}>Village: {user.village}</Text>
+                                <Text style={[styles.infoText, { color }]}>Village: {user.village}</Text>
                             </View>
                         )}
                         {user && user.city && (
                             <View style={styles.info}>
                                 <Icon color={color} name={'location'} size={20} />
-                                <Text style={[styles.infoText, {color}]}>City: {user.city}</Text>
+                                <Text style={[styles.infoText, { color }]}>City: {user.city}</Text>
                             </View>
                         )}
 
                         {/** Bio */}
-                        {user && user.bio && <Text style={[styles.infoText, {color}]}>{user.bio}</Text>}
+                        {user && user.bio && <Text style={[styles.infoText, { color }]}>{user.bio}</Text>}
                     </View>
                 </View>
             </View>
@@ -141,9 +146,9 @@ const Profile: FC = () => {
     };
 
     return (
-        
-            <UserHeader handleLogout={handleLogout} router={router} user={user} />
-       
+
+        <UserHeader handleLogout={handleLogout} router={router} user={user} />
+
     );
 };
 

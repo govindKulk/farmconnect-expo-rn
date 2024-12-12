@@ -39,10 +39,7 @@ const ProductCard: React.FunctionComponent<ProductCardProps> = ({
 
     return (
         <Pressable
-        onPress={() => router.push({
-            pathname: "/(tabs)/product",
-            params: {productId: product.id}
-        })}
+
         >
             <ThemedView
                 lightColor='white'
@@ -69,50 +66,64 @@ const ProductCard: React.FunctionComponent<ProductCardProps> = ({
                         padding: 10,
                     }}
                 >
-                    <ThemedView
-                        lightColor='white'
-                        darkColor={theme.colors.primaryDark}
+                   
+                        <ThemedView
+                            lightColor='white'
+                            darkColor={theme.colors.primaryDark}
+                            style={{
+                                flex: 1
+                            }}
+                        >
+                             <Pressable
                         style={{
                             flex: 1
                         }}
-                    >
-                        <ThemedText
-                            type={"subtitle"}
-                            style={{
-                                color,
-                                fontSize: hp(2.5)
-                            }}
+                        onPress={() => router.push({
+                            pathname: "/(tabs)/product",
+                            params: {productId: product.id}
+                        })}
                         >
-                            {title}
-                        </ThemedText>
+                            <ThemedText
+                                type={"subtitle"}
+                                style={{
+                                    color,
+                                    fontSize: hp(2.5)
+                                }}
+                                >
+                                {title}
+                            </ThemedText>
+
+                    </Pressable>
+
+                            <Text
+                                style={{
+                                    fontSize: hp(1.5),
+                                    fontWeight: 600
+                                }}
+                            >
+                                {product.expected_rate} RS / per ({product.unit})
+                            </Text>
+
+                            <ThemedText
+                                style={{
+                                    fontSize: hp(1.5),
+
+                                }}
+                                lightColor='gray'
+                                darkColor='white'
+                            >
+                                {product.description}
+                            </ThemedText>
 
 
-                        <Text
-                    style={{
-                        fontSize: hp(1.5),
-                        fontWeight: 600
-                    }}
-                >
-                    {product.expected_rate} RS / per ({product.unit})
-                </Text>
 
-                        <ThemedText
-                            style={{
-                                fontSize: hp(1.5),
+                        </ThemedView>
 
-                            }}
-                            lightColor='gray'
-                            darkColor='white'
-                        >
-                            {product.description}
-                        </ThemedText>
-
-
-
-                    </ThemedView>
-
-                    <ThemedView
-
+                    <Pressable
+                        onPress={() => router.push({
+                            pathname: "/(tabs)/product",
+                            params: { productId: product.id }
+                        })}
                         style={{
                             elevation: 5,
                             maxWidth: wp(40),
@@ -130,7 +141,7 @@ const ProductCard: React.FunctionComponent<ProductCardProps> = ({
                                 flex: 1
                             }}
                         />
-                    </ThemedView>
+                    </Pressable>
                 </ThemedView>
 
                 <ThemedView

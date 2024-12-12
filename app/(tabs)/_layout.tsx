@@ -22,7 +22,9 @@ export default function TabLayout() {
 
 
 
-    <ScreenWrapper>
+    <ScreenWrapper
+    bg={bgColor}
+    >
             <Tabs
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,

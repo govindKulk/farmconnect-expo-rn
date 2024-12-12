@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View, Image, KeyboardAvoidingView } from 'react-native';
-// import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 
@@ -10,6 +9,7 @@ import { theme } from '@/constants';
 import { useAuth } from '@/contexts/AuthContext';
 import { hp, wp } from '@/helpers';
 import { getUserImageSrc, updateUser, uploadFile } from '@/services';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 const EditProfile = () => {
     const { user: currentUser, setUserData } = useAuth();
@@ -25,7 +25,7 @@ const EditProfile = () => {
         image: null | string;
         name: string;
         phonenumber: string;
-    }>({ landmark: '',city: '',village: '', state: "", bio: '', image: null, name: '', phonenumber: '' });
+    }>({ landmark: '', city: '', village: '', state: "", bio: '', image: null, name: '', phonenumber: '' });
 
     const onPickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -41,7 +41,7 @@ const EditProfile = () => {
 
     const onSubmit = async () => {
         let userData = { ...user };
-        let { village,landmark,city, state, bio, image, name, phonenumber } = userData;
+        let { village, landmark, city, state, bio, image, name, phonenumber } = userData;
 
         if (!village || !city || !state || !landmark || !bio || !image || !name || !phonenumber) {
             Alert.alert('Profile', 'Please fill all the fields');
@@ -86,9 +86,17 @@ const EditProfile = () => {
         }
     }, [currentUser]);
 
+    const bgColor = useThemeColor({}, "background")
+    const textColor = useThemeColor({}, "text")
+
+             const color = useThemeColor({}, "text");
+            
+            
+                const iconBg = useThemeColor({ light: "white", dark: "rgba(165, 157, 157, 0.7)" }, "background")
+
     return (
 
-        <ScreenWrapper bg={'white'}>
+        <ScreenWrapper bg={bgColor}>
 
             <View style={styles.container}>
                 <KeyboardAvoidingView
@@ -107,12 +115,14 @@ const EditProfile = () => {
                                     source={user.image?.includes('///') ? { uri: user.image } : getUserImageSrc(user.image)}
                                     style={styles.avatar}
                                 />
-                                <Pressable onPress={onPickImage} style={styles.cameraIcon}>
-                                    <Icon name={'camera'} size={20} strokeWidth={2.5} />
+                                <Pressable onPress={onPickImage} style={[styles.cameraIcon, {
+                            backgroundColor: iconBg
+                        }]}>
+                                    <Icon name={'camera'} size={20} strokeWidth={2.5} color={color} />
                                 </Pressable>
                             </View>
 
-                            <Text style={{ color: theme.colors.text, fontSize: hp(1.5) }}>
+                            <Text style={{ color: textColor, fontSize: hp(1.5) }}>
                                 {'Please fill your profile details'}
                             </Text>
                             <TextField
