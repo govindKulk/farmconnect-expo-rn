@@ -46,7 +46,9 @@
     "react-native-svg": "^15.9.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.10",
-    "react-native-webview": "^11.26.1"
+    "react-native-webview": "^11.26.1",
+    "expo-crypto": "~13.0.2",
+    "expo-updates": "~0.25.27"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

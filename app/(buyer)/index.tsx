@@ -61,11 +61,11 @@ const BuyerHomeScreen = () => {
         console.log(error);
         if(error){
             console.log("error inserting data ", error);
-            Alert.alert("Error inserting data ");
+            Alert.alert("Error submitting bid request. ");
             closeModal();
             return;
         }
-        Alert.alert("Successfully inserted data");
+        Alert.alert("Successfully submited bid request.");
 
         closeModal();
     };

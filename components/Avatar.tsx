@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { ImageStyle, StyleProp, StyleSheet, Image } from 'react-native';
-// import { Image } from 'expo-image';
 
 import { theme } from '@/constants';
 import { hp } from '@/helpers/';

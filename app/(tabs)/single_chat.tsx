@@ -4,11 +4,13 @@ import { useLocalSearchParams } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { Text, View } from 'react-native';
 import { Avatar } from '@/components';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 import { hp } from '@/helpers';
 import { theme } from '@/constants';
 import { useChatContext } from '@/contexts/ChatContext';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import * as Crypto from 'expo-crypto'
+import { Alert } from 'react-native';
 
 const ChatScreen = () => {
     const params = useLocalSearchParams<{ conversationId: string }>();
@@ -68,7 +70,8 @@ const ChatScreen = () => {
     }, [conversationId]);
 
     const onSend = async (newMessages: any = []) => {
-        const message = newMessages[0];
+        try{
+            const message = newMessages[0];
 
         // Send the message to the backend
         await sendMessage(conversationId, user?.id, message.text);
@@ -84,12 +87,41 @@ const ChatScreen = () => {
         // //   }
         //   return prev;
         // });
+        }catch(error){
+            console.log(error);
+            Alert.alert("Error while sending message: ", error as string)
+        }
     };
 
     console.log("current conversations: ", currentConversation)
     const headerBgColor = useThemeColor({light: "#dfdfdf", dark: "#232323"}, "background")
     const bgColor = useThemeColor({light: "white", dark: "#232323"}, "background")
     const textColor = useThemeColor({}, "text")
+
+    const renderCustomBubble = (props: any) => {
+        return (
+            <Bubble
+                {...props}
+                wrapperStyle={{
+                    left: {
+                        backgroundColor: "#e6f7ff", // Background for received messages
+                    },
+                    right: {
+                        backgroundColor: "#0078d4", // Background for sent messages
+                    },
+                }}
+                textStyle={{
+                    left: {
+                        color: "#000", // Text color for received messages
+                    },
+                    right: {
+                        color: "#fff", // Text color for sent messages
+                    },
+                }}
+            />
+        );
+    };
+
     return (
         <View
         style={{
@@ -117,9 +149,12 @@ const ChatScreen = () => {
             </View>
             <GiftedChat
                 alignTop={true}
+                
                 messages={messages}
                 onSend={(messages) => onSend(messages)}
                 user={{ _id: user.id }}
+                messageIdGenerator={() => Crypto.randomUUID() as string}
+                renderBubble={renderCustomBubble}
             />
         </View>
     );
