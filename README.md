@@ -1,7 +1,14 @@
-# 🌾 FarmConnect
 
-![FarmConnect Logo](./images/logo.png)  
-*Empowering Farmers, Enriching Lives*  
+  # 🌾 FarmConnect
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/69ca6e63-9c0f-49ab-a96d-b47290edb6f9" alt="Example Image" style="max-height: 400px;" />
+</p>
+
+  *Empowering Farmers, Enriching Lives*  
+
+
+
 
 FarmConnect is a mobile application designed to create a seamless online marketplace for farmers to sell their produce directly to buyers. The app aims to revolutionize agricultural trade by eliminating middlemen, promoting fair trade practices, and fostering direct communication between farmers and buyers.
 
@@ -10,12 +17,31 @@ FarmConnect is a mobile application designed to create a seamless online marketp
 ## 📱 Screenshots
 
 ### Farmer Features
-![Farmer Dashboard](./images/farmer_dashboard.png)  
-![Post a Product](./images/post_product.png)  
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/7acd1dae-00e7-4849-a1f4-623e1193a605" alt="IMG-20241212-WA0005" height="400" />
+  <img src="https://github.com/user-attachments/assets/f1e791ab-5376-4450-8653-ee4bccb7d2e5" alt="IMG-20241212-WA0006" height="400" />
+</div>
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/e60840ad-0632-43c8-997e-63d2a24d1dca" alt="IMG-20241212-WA0009" height="400" />
+  <img src="https://github.com/user-attachments/assets/e206b719-a7d7-44e8-bc78-bab1506e06a2" alt="IMG-20241212-WA0013" height="400" />
+</div>
+
+
+
 
 ### Buyer Features
-![Buyer Dashboard](./images/buyer_dashboard.png)  
-![Product Listings](./images/product_listings.png)  
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/99e01a4c-8f24-4e90-ac8c-aac088aedd59" alt="IMG-20241212-WA0007" height="400" />
+  <img src="https://github.com/user-attachments/assets/40ef5f89-7e3c-4a1c-99e7-63fd2dc49b22" alt="IMG-20241212-WA0015" height="400" />
+</div>
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/ac60a191-efa7-46e4-a22d-a58e8f6c35a6" alt="IMG-20241212-WA0006" height="400" />
+  <img src="https://github.com/user-attachments/assets/039ee961-f200-497f-bb8b-502a3f98ab3b" alt="IMG-20241212-WA0012" height="400" />
+</div>
+
+
 
 ---
 
@@ -91,7 +117,7 @@ Follow these steps to set up the project locally:
 ### Steps
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/FarmConnect.git
+   git clone https://github.com/govindKulk/farmconnect-expo-rn.git
    cd FarmConnect
    ```
 
