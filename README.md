@@ -2,7 +2,7 @@
   # 🌾 FarmConnect
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/69ca6e63-9c0f-49ab-a96d-b47290edb6f9" alt="Example Image" style="max-height: 400px;" />
+  <img src="https://github.com/user-attachments/assets/69ca6e63-9c0f-49ab-a96d-b47290edb6f9" alt="Example Image" height="600"  />
 </p>
 
   *Empowering Farmers, Enriching Lives*  
@@ -62,10 +62,8 @@ FarmConnect is a mobile application designed to create a seamless online marketp
 - **Chat with Farmers**: Real-time chat for better deal-making.
 - **Profile Update**: Manage and update personal information.
 
-### 🚀 **Other Features**
-- **Real-Time Updates**: Chat functionality powered by Supabase real-time database.
-- **Secure Payments**: Placeholder for integrating payment gateways.
-
+### 🚀 ****
+- **Real-Time Updates**: Chat functionality powered by Supabase real-time database
 ---
 
 ## 🛠️ Technology Stack
@@ -153,9 +151,9 @@ Follow these steps to set up the project locally:
 ---
 
 ## 👨‍💻 Author
-- **Name**: [Govind Kulkarni]
+- **Name**: Govind Kulkarni
 - **Email**: [kulkarnigovind2003@gmail.com]
-- **LinkedIn**: [Your LinkedIn Profile](https://www.linkedin.com/in/govind-kulkarni-44aa71228/)
+- **LinkedIn**: [LinkedIn: Govind Kulkarni](https://www.linkedin.com/in/govind-kulkarni-44aa71228/)
 
 ---
 
