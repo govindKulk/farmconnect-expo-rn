@@ -1,6 +1,10 @@
 
   # 🌾 FarmConnect
 
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c225542b-99a0-4d87-9e6d-a1ef257e38b7" alt="Example Image" height="600"  />
+</p>
 <p align="center">
   <img src="https://github.com/user-attachments/assets/69ca6e63-9c0f-49ab-a96d-b47290edb6f9" alt="Example Image" height="600"  />
 </p>
