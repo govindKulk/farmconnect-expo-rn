@@ -6,8 +6,9 @@
   <img src="https://github.com/user-attachments/assets/c225542b-99a0-4d87-9e6d-a1ef257e38b7" alt="Example Image" height="600"  />
 </p>
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/69ca6e63-9c0f-49ab-a96d-b47290edb6f9" alt="Example Image" height="600"  />
+  <img src="https://github.com/user-attachments/assets/6b8b7fb5-8de1-4ef2-9454-c37b91c9b6fc" alt="Example Image" height="600"  />
 </p>
+
 
   *Empowering Farmers, Enriching Lives*  
 
@@ -21,17 +22,20 @@ FarmConnect is a mobile application designed to create a seamless online marketp
 ## 📱 Screenshots
 
 ### Farmer Features
+
+
+
+
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/7acd1dae-00e7-4849-a1f4-623e1193a605" alt="IMG-20241212-WA0005" height="400" />
-  <img src="https://github.com/user-attachments/assets/f1e791ab-5376-4450-8653-ee4bccb7d2e5" alt="IMG-20241212-WA0006" height="400" />
+  <img src="https://github.com/user-attachments/assets/abfe781d-d6b2-4d29-956a-d15ca557da5e" alt="IMG-20241212-WA0006"  width="400" />
+  <img src="https://github.com/user-attachments/assets/5f6092e8-ea3d-405d-8c7c-f6a5ded79654" alt="IMG-20241212-WA0009"  width="400" />
+  <img src="https://github.com/user-attachments/assets/bcda3035-8cd6-4c48-aa77-dcdf6aaa5145" alt="IMG-20241212-WA0013" width="400" />
+  <img src="https://github.com/user-attachments/assets/c7e90745-ef37-4429-b7e5-fc7863f77745" alt="IMG-20241212-WA0013" width="400" />
 </div>
 
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/e60840ad-0632-43c8-997e-63d2a24d1dca" alt="IMG-20241212-WA0009" height="400" />
-  <img src="https://github.com/user-attachments/assets/e206b719-a7d7-44e8-bc78-bab1506e06a2" alt="IMG-20241212-WA0013" height="400" />
-</div>
 
-
+![pika-1738073160756-1x]()
+![pika-1738072901483-1x](https://github.com/user-attachments/assets/5a999ab2-1a86-4252-b5d2-f1a3e576a610)="https://github.com/user-attachments/assets/f1e791ab-5376-4450-8653-ee4bccb7d2e5
 
 
 ### Buyer Features
